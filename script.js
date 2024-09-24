@@ -20,7 +20,6 @@ async function generatePasswords() {
             passwordsDiv.appendChild(p);
         });
 
-        // Mostrar notificación de éxito
         Swal.fire({
             title: 'Contraseñas Generadas',
             text: `Se generaron ${quantity} contraseñas correctamente.`,
@@ -28,7 +27,6 @@ async function generatePasswords() {
             confirmButtonText: 'Aceptar'
         });
     } catch (error) {
-        // Mostrar error al usuario
         Swal.fire({
             title: 'Error',
             text: error.message,
@@ -66,7 +64,6 @@ async function downloadExcel() {
 
         XLSX.writeFile(wb, "contraseñas.xlsx");
 
-        // Mostrar notificación de éxito
         Swal.fire({
             title: 'Excel Descargado',
             text: 'Las contraseñas han sido exportadas a un archivo Excel.',
@@ -90,34 +87,45 @@ async function processFile() {
         if (!file) throw new Error("Por favor seleccione un archivo.");
 
         const reader = new FileReader();
+
         reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            let json = XLSX.utils.sheet_to_json(worksheet);
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
 
-            json = json.map(row => ({
-                ...row,
-                PASSWORD: generateRandomPassword()
-            }));
+                let json = XLSX.utils.sheet_to_json(worksheet);
+                
+                json = json.map(row => ({
+                    ...row,
+                    PASSWORD: generateRandomPassword()
+                }));
 
-            displayCourses(json);
+                displayCourses(json);
 
-            const newWorksheet = XLSX.utils.json_to_sheet(json);
-            const newWorkbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Actualizado');
+                const newWorksheet = XLSX.utils.json_to_sheet(json);
+                const newWorkbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Actualizado');
 
-            XLSX.writeFile(newWorkbook, 'cursos_actualizados.xlsx');
+                XLSX.writeFile(newWorkbook, 'cursos_actualizados.xlsx');
 
-            // Notificación de éxito
-            Swal.fire({
-                title: 'Archivo Procesado',
-                text: 'El archivo ha sido actualizado y descargado.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-            });
+                Swal.fire({
+                    title: 'Archivo Procesado',
+                    text: 'El archivo ha sido actualizado y descargado.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error al procesar el archivo. Asegúrate de que el archivo es válido.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
         };
+
         reader.readAsArrayBuffer(file);
     } catch (error) {
         Swal.fire({
@@ -175,7 +183,7 @@ function displayCourses(courses) {
 
 function generateReports() {
     const table = document.getElementById('courseTable').getElementsByTagName('table')[0];
-    const rows = Array.from(table.getElementsByTagName('tr')).slice(1); // Excluir la fila de encabezado
+    const rows = Array.from(table.getElementsByTagName('tr')).slice(1);
 
     rows.forEach(row => {
         const cells = row.getElementsByTagName('td');
@@ -198,38 +206,31 @@ function createPDFReport(courseData) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Títulos Centrados y en Negrita
     doc.setFontSize(12);
     doc.setFont('Arial', 'bold');
     doc.text('Universidad Interamericana de Puerto Rico', 105, 20, null, null, 'center');
     doc.text('Recinto de Guayama', 105, 30, null, null, 'center');
     doc.text('Educación en Línea', 105, 40, null, null, 'center');
 
-    // Información del Profesor y Departamento
     doc.setFontSize(12);
     doc.setFont('Arial', 'normal');
     doc.text(`Nombre del Profesor(a): ${courseData.instructorName}`, 10, 60);
     doc.text(`Departamento: ${courseData.departamento}`, 10, 70);
 
-    // Saludo
     doc.text('Estimado(a) profesor(a):', 10, 90);
     doc.text('La siguiente contraseña de acceso a los exámenes custodiados de sus cursos han sido asignadas.', 10, 100);
 
-    // Notificación de Contraseña
     doc.setFont('Arial', 'bold');
     doc.text('Notificación de Contraseña de Exámenes Custodiados', 10, 120);
 
-    // Detalles del Curso
     doc.setFont('Arial', 'normal');
     doc.text(`Nombre del Curso: ${courseData.courseName}`, 10, 140);
     doc.text(`CRN: ${courseData.courseId}`, 10, 150);
 
-    // Contraseña
     doc.setFontSize(14);
     doc.setFont('Arial', 'bold');
     doc.text(`Password: ${courseData.password}`, 105, 170, null, null, 'center');
 
-    // Texto Informativo
     doc.setFontSize(12);
     doc.setFont('Arial', 'normal');
     doc.text('Es necesario que los exámenes custodiados de su curso en línea utilicen esta contraseña asignada. Esto', 10, 190);
@@ -242,7 +243,6 @@ function createPDFReport(courseData) {
     doc.text('la categoría de restrictos, que se accede a través de Inter Web. Me comprometo a cumplir con las', 10, 260);
     doc.text('Políticas, Normas y Procedimientos establecidos por la Universidad.', 10, 270);
 
-    // Firmas
     doc.text('_________________________________', 30, 290);
     doc.text('______________________', 140, 290);
     doc.text('Firma Director Educación en Línea', 30, 300);
@@ -250,4 +250,3 @@ function createPDFReport(courseData) {
 
     doc.save(`Reporte_${courseData.courseId}.pdf`);
 }
-
