@@ -30,7 +30,7 @@ header h1, header h2 {
 h2 {
     color: #005700;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 /* Form and Button Styles */
@@ -62,7 +62,7 @@ button:hover {
 
 /* Passwords Div */
 #passwords {
-    margin-top: 10px;
+    margin-top: 0;
     max-height: 200px;
     overflow-y: auto;
     background-color: #e0e0e0;
@@ -74,7 +74,7 @@ button:hover {
 /* Table Styles */
 .table {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 0;
     border-collapse: collapse;
 }
 
