@@ -206,47 +206,84 @@ function createPDFReport(courseData) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    // Configuración inicial
+    const lineSpacing = 6;  // Espacio sencillo
+    let currentY = 20;
+
+    currentY += lineSpacing * 4; // Espacio adicional antes del Títulos Centrados y en Negrita
+
+    // Títulos Centrados y en Negrita
     doc.setFontSize(12);
     doc.setFont('Arial', 'bold');
-    doc.text('Universidad Interamericana de Puerto Rico', 105, 20, null, null, 'center');
-    doc.text('Recinto de Guayama', 105, 30, null, null, 'center');
-    doc.text('Educación en Línea', 105, 40, null, null, 'center');
+    doc.text('Universidad Interamericana de Puerto Rico', 105, currentY, null, null, 'center');
+    currentY += lineSpacing;
+    doc.text('Recinto de Guayama', 105, currentY, null, null, 'center');
+    currentY += lineSpacing;
+    doc.text('Centro de Informática, Telecomunicaciones y Educación en Línea', 105, currentY, null, null, 'center');
+    currentY += lineSpacing * 2; // Espacio adicional antes de la siguiente sección
 
+    // Información del Profesor y Departamento
     doc.setFontSize(12);
     doc.setFont('Arial', 'normal');
-    doc.text(`Nombre del Profesor(a): ${courseData.instructorName}`, 10, 60);
-    doc.text(`Departamento: ${courseData.departamento}`, 10, 70);
+    doc.text(`Nombre del Profesor(a): ${courseData.instructorName}`, 20, currentY);
+    currentY += lineSpacing;
+    doc.text(`Departamento: ${courseData.departamento}`, 20, currentY);
+    currentY += lineSpacing * 1.5; // Espacio adicional antes del saludo
 
-    doc.text('Estimado(a) profesor(a):', 10, 90);
-    doc.text('La siguiente contraseña de acceso a los exámenes custodiados de sus cursos han sido asignadas.', 10, 100);
+    // Saludo
+    doc.text('Estimado(a) profesor(a):', 20, currentY);
+    currentY += lineSpacing;
+    doc.text('La siguiente contraseña de acceso a los exámenes custodiados de sus cursos han sido asignadas.', 20, currentY);
+    currentY += lineSpacing * 2; // Espacio adicional antes de la notificación
 
+    // Notificación de Contraseña
     doc.setFont('Arial', 'bold');
-    doc.text('Notificación de Contraseña de Exámenes Custodiados', 10, 120);
+    doc.text('Notificación de Contraseña de Exámenes Custodiados', 20, currentY);
+    currentY += lineSpacing * 1.5; // Espacio adicional antes de los detalles del curso
 
+    // Detalles del Curso
     doc.setFont('Arial', 'normal');
-    doc.text(`Nombre del Curso: ${courseData.courseName}`, 10, 140);
-    doc.text(`CRN: ${courseData.courseId}`, 10, 150);
+    doc.text(`Nombre del Curso: ${courseData.courseName}`, 20, currentY);
+    currentY += lineSpacing;
+    doc.text(`CRN: ${courseData.courseId}`, 20, currentY);
+    currentY += lineSpacing * 4; // Espacio adicional antes de la contraseña
 
-    doc.setFontSize(14);
+    // Contraseña
+    doc.setFontSize(32);
     doc.setFont('Arial', 'bold');
-    doc.text(`Password: ${courseData.password}`, 105, 170, null, null, 'center');
+    doc.text(`Password: ${courseData.password}`, 105, currentY, null, null, 'center');
+    currentY += lineSpacing * 4; // Espacio adicional antes del texto informativo
 
+    // Texto Informativo
     doc.setFontSize(12);
     doc.setFont('Arial', 'normal');
-    doc.text('Es necesario que los exámenes custodiados de su curso en línea utilicen esta contraseña asignada. Esto', 10, 190);
-    doc.text('obedece a que el personal custodio en los Recintos de la Universidad Interamericana de Puerto Rico y', 10, 200);
-    doc.text('Centros Cibernéticos tienen las contraseñas.', 10, 210);
+    doc.text('Es necesario que los exámenes custodiados de su curso en línea utilicen esta contraseña asignada. Esto', 20, currentY);
+    currentY += lineSpacing;
+    doc.text('obedece a que el personal custodio en los Recintos de la Universidad Interamericana de Puerto Rico y', 20, currentY);
+    currentY += lineSpacing;
+    doc.text('Centros Cibernéticos tienen las contraseñas.', 20, currentY);
+    currentY += lineSpacing * 1.5; // Espacio adicional antes de la siguiente sección
 
-    doc.text('La Universidad tiene disponible en su WEB SITE todos los documentos normativos, con los asuntos', 10, 230);
-    doc.text('clasificados en dos categorías. Una para el uso público, la cual se accede a través de', 10, 240);
-    doc.text('http://www.inter.edu/documentos/index.asp y otra para uso de los empleados de la Universidad, bajo', 10, 250);
-    doc.text('la categoría de restrictos, que se accede a través de Inter Web. Me comprometo a cumplir con las', 10, 260);
-    doc.text('Políticas, Normas y Procedimientos establecidos por la Universidad.', 10, 270);
+    // Texto Informativo2
+    doc.setFontSize(9);
+    doc.setFont('Arial', 'normal');
+    doc.text('La Universidad tiene disponible en su WEB SITE todos los documentos normativos, con los asuntos', 105, currentY, null, null, 'center');
+    currentY += lineSpacing;
+    doc.text('clasificados en dos categorías. Una para el uso público, la cual se accede a través de', 105, currentY, null, null, 'center');
+    currentY += lineSpacing;
+    doc.text('http://www.inter.edu/documentos/index.asp y otra para uso de los empleados de la Universidad, bajo', 105, currentY, null, null, 'center');
+    currentY += lineSpacing;
+    doc.text('la categoría de restrictos, que se accede a través de Inter Web. Me comprometo a cumplir con las', 105, currentY, null, null, 'center');
+    currentY += lineSpacing;
+    doc.text('Políticas, Normas y Procedimientos establecidos por la Universidad.', 105, currentY, null, null, 'center');
+    currentY += lineSpacing * 4; // Espacio adicional antes de las firmas
 
-    doc.text('_________________________________', 30, 290);
-    doc.text('______________________', 140, 290);
-    doc.text('Firma Director Educación en Línea', 30, 300);
-    doc.text('Firma del Profesor', 140, 300);
+    // Firmas
+    doc.text('_________________________________', 30, currentY);
+    doc.text('______________________', 140, currentY);
+    currentY += lineSpacing;
+    doc.text('Firma Director Educación en Línea', 30, currentY);
+    doc.text('Firma del Profesor', 140, currentY);
 
     doc.save(`Reporte_${courseData.courseId}.pdf`);
 }
