@@ -62,7 +62,7 @@ button:hover {
 
 /* Passwords Div */
 #passwords {
-    margin-top: 20px;
+    margin-top: 10px;
     max-height: 200px;
     overflow-y: auto;
     background-color: #e0e0e0;
@@ -74,7 +74,7 @@ button:hover {
 /* Table Styles */
 .table {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
     border-collapse: collapse;
 }
 
@@ -93,7 +93,7 @@ button:hover {
 footer {
     background-color: #005700;
     color: white;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     margin-top: auto;
 }
