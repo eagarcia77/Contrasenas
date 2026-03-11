@@ -217,7 +217,7 @@ function createPDFReport(courseData) {
     doc.setFont('Arial', 'bold');
     doc.text('Universidad Interamericana de Puerto Rico', 105, currentY, null, null, 'center');
     currentY += lineSpacing;
-    doc.text('Recinto de Guayama', 105, currentY, null, null, 'center');
+    doc.text('Recinto de San Germán', 105, currentY, null, null, 'center');
     currentY += lineSpacing;
     doc.text('Centro de Informática, Telecomunicaciones y Educación en Línea', 105, currentY, null, null, 'center');
     currentY += lineSpacing * 2; // Espacio adicional antes de la siguiente sección
